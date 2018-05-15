@@ -1,0 +1,128 @@
+textarea,input,button{
+    background-color: unset;
+    border: 1px solid #1ABDE6; 
+    border-radius: 4px;
+    padding: 0;
+    line-height: 26px;
+    padding: 6px;
+    box-sizing: border-box;
+    box-shadow: 2px 2px 4px #DDD;
+    color: #888;
+    background-color: white;
+}
+button{
+    background-color: #1ABDE6;
+    color: white;
+}
+#wallet_install button,#index,#boy,#boy_content,#girl,#girl_content,#confirm {
+    display: block;
+    width: 100%;
+}
+::-webkit-input-placeholder{
+    color: #888;
+}
+body{
+    padding: 0;
+    margin: 0;
+    background-image: url(./images.jpg)
+}
+.navBar{
+    background-color: #1ABDE6;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 0 40px;
+    font-size: 34px;
+    box-shadow: 2px 2px 4px #CCC;
+    color: white;
+}
+.index{
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1000px;
+    margin-top: 30px;
+}
+.container{
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1000px;
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.container .left{
+    padding-top: 80px;
+    flex: 1;
+    padding-right: 10px;
+    position: relative;
+}
+.container .left .iconfont{
+    position: absolute;
+    top: 0;
+    right: 8px;
+    font-size: 60px;
+    color: #1ABDE6;
+}
+.container .right .iconfont{
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 60px;
+    color: #F709F7;
+}
+.container .right{
+    padding-top: 80px;
+    flex: 1;
+    padding-left: 10px;
+    position: relative;
+    
+}
+.container .right #girl,#girl_content{
+    /* border: 1px solid #F709F7;  */
+}
+#wallet_install{
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1000px;
+    margin-bottom: 30px;
+}
+#wallet_install button{
+    margin-top: 40px;
+    color: white;
+}
+.footer{
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1000px;
+    margin-bottom: 30px;
+}
+.footer #confirm{
+    margin-bottom: 20px;
+    background-color: #1ABDE6;
+    color: white;
+}
+.search{
+    display: flex;
+    margin-bottom: 20px;
+}
+.search #search_value{
+    flex: 1;
+}
+.search #search{
+    flex: 0;
+    min-width: 100px;
+    margin-left: 20px;
+    background-color: #1ABDE6;
+    color: white;
+}
+.logo{
+    height: 40px;
+    background-image: url(./xingyun.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#toggleButton{
+    opacity: 0;
+    width: 0;
+    height: 0;
+}

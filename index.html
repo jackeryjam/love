@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href="./iconfont.css" rel="stylesheet" type="text/css" />
+	<link href="./index.css" rel="stylesheet" type="text/css" />
+	<title>星云婚姻</title>
+
+	<style>
+		html {}
+
+		.input {}
+
+		.content {
+			height: 200px;
+			margin-top: 10px;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+		<div class="navBar">Welcome to 星云婚姻 ！！！</div>
+		<div id="wallet_install">
+		</div>
+		<div class="index">
+			<input id="index" class="input" type="text" placeholder="请设置独一无二的索引">
+		</div>
+		<div class="container">
+			<div class="left">
+				<i class="iconfont icon-nan"></i>
+				<input id="boy" class="input" type="text" placeholder="男生名字">
+				<textarea id="boy_content" class="content" placeholder="男生誓言"></textarea>
+			</div>
+			<div class="right">
+				<i class="iconfont icon-nv"></i>
+				<input id="girl" class="input" type="text" placeholder="女生名字">
+				<textarea id="girl_content" class="content" placeholder="女生誓言"></textarea>
+			</div>
+		</div>
+		<div class="footer">
+			<button id="confirm">提交</button>
+			<div class="search">
+				<input id="search_value" placeholder="通过索引查找你的誓言吧" type="text">
+				<button id="search">search</button>
+			</div>
+			<div id="ale"></div>
+		</div>
+		<div class="logo"></div>
+	</div>
+	<script src=lib/jquery-3.3.1.min.js></script>
+	<script src=lib/nebPay.js></script>
+	<script src=lib/nebulas.js></script>
+	<script>
+		var NebPay = require("nebpay");
+		var nebPay = new NebPay();
+
+
+		if (typeof (webExtensionWallet) === "undefined") {
+			$("#wallet_install").html(
+				"<button onclick=\"{location.href='https://github.com/ChengOrangeJu/WebExtensionWallet'}\"> 请安装在线钱包，点击跳转</button>"
+			);
+		} else {
+
+		}
+
+		var serialNumber;
+		var intervalQuery;
+		var dappAddress = "n1iBe11AKZ49vE3vNsvTGYFQy78SZ13v26D";
+		var rank = [];
+
+		$("#search").click(function () {
+			var to = dappAddress;
+			var value = "0";
+			var callFunction = "get";
+			var callArgs = "[\"" + $("#search_value").val() + "\"]";
+			nebPay.simulateCall(to, value, callFunction, callArgs, {
+				listener: getPledge
+			});
+
+		})
+
+		function getPledge(resp) {
+			console.log(resp.reuslt);
+			var result = JSON.parse(resp.result);
+			var obj = result;
+			print(obj);
+			$("#search_value").val("");
+		}
+
+		function print(text) {
+			$("#boy").val(text.man_name);
+			$("#boy_content").val(text.man_content);
+			$("#girl").val(text.woman_name);
+			$("#girl_content").val(text.woman_content);
+		}
+
+		$("#confirm").click(function () {
+
+			var to = dappAddress;
+			var value = "0";
+			var callFunction = "save";
+			var callArgs = [];
+			callArgs.push($("#index").val());
+			callArgs.push($("#boy").val());
+			callArgs.push($("#girl").val());
+			callArgs.push($("#boy_content").val());
+			callArgs.push($("#girl_content").val());
+			nebPay.call(to, value, callFunction, JSON.stringify(callArgs), {
+				listener: savePledge
+			});
+		})
+
+		function savePledge(resp) {
+			// alert("submit success");
+			$("#toggleButton").click();
+			$("#boy").val("");
+			$("#boy_content").val("");
+			$("#girl").val("");
+			$("#girl_content").val("");
+			console.log("response of save: " + resp)
+		}
+	</script>
+	<button id="toggleButton" data-toggle="modal" data-target="#myModal"></button>
+	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+						&times;
+					</button>
+					<h4 class="modal-title" id="myModalLabel">
+						提交成功
+					</h4>
+				</div>
+				<div class="modal-body">
+					你已经成功创建自己独一无二的爱情宣言了
+				</div>
+				<div class="modal-footer">
+					<!-- <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+					</button> -->
+					<button type="button" class="btn btn-primary"  data-dismiss="modal">
+						确定
+					</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+</body>
+
+</html>
