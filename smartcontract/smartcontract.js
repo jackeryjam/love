@@ -1,47 +1,33 @@
 "use strict";
 
-var Diary = function(text) {
-    if (text) {
-        var obj = JSON.parse(text);
-        this.title = obj.title;
-        this.content = obj.content;
-    } else {
-        this.title = "";
-        this.content = "";
-    }
+var Pledge = function(text) {
+	if (text) {
+		var obj = JSON.parse(text);
+		this.man_name = obj.man_name;
+		this.man_content = obj.man_content;
+        this.woman_name = obj.woman_name;
+        this.woman_content = obj.woman_content;
+        this.date = obj.date;
+	} else {
+	    this.man_name = "";
+	    this.man_content = "";
+        this.woman_name = "";
+        this.woman_content = "";
+        this.date = new Date();
+	}
 };
 
-var User = function(text) {
-    if (text) {
-        var obj = JSON.parse(text);
-        this.name = obj.name;
-        this.password = obj.password;
-        this.diary_num = 0;
-    } else {
-        this.name = "";
-        this.password = "";
-        this.diary_num = 0;
-    }
+Pledge.prototype = {
+	toString: function () {
+		return JSON.stringify(this);
+	}
 };
 
-Diary.prototype = {
-    toString: function () {
-        return JSON.stringify(this);
-    }
-};
 
-User.prototype = {
-    toString: function () {
-        return JSON.stringify(this);
-    }
-};
-
-var NEBULASDiary = function () {
-    LocalContractStorage.defineProperty(this, "id_to_title");
-    LocalContractStorage.defineMapProperty(this,"id_to_user")
-    LocalContractStorage.defineMapProperty(this, "diary", {
+var Certificate = function () {
+    LocalContractStorage.defineMapProperty(this, "pledge", {
         parse: function (text) {
-            return new Diary(text);
+            return new Pledge(text);
         },
         stringify: function (obj) {
             return obj.toString();
@@ -49,57 +35,36 @@ var NEBULASDiary = function () {
     });
 };
 
-NEBULASDiary.prototype = {
-    init: function () { this.diary_id = 1; },
+Certificate.prototype = {
+    init: function () {},
 
-    save: function (title, content) {
+    save: function (index,man_name, woman_name,man_content,woman_content) {
 
-        title = title.trim();
-        if (title === "" ){
-            throw new Error("empty title");
-        }
-        if (title.length > 64){
-            throw new Error("title exceed limit length")
-        }
-
-        var diary = this.diary.get(title);
-        if (Diary){
-            throw new Error("title has been occupied");
+        man_name = man_name.trim();
+        woman_name = woman_name.trim();
+        if (man_name === "" || woman_name === ""){
+            throw new Error("empty name");
+        }        
+        if (man_name.length > 64 || woman_name.length > 64){
+            throw new Error("name exceed limit length")
         }
 
-        diary = new Diary();
-        Diary.title = title;
-        Diary.content = content;
-        var id = this.diary_id;
-        this.title.set(id,title);
-        this.diary.put(title, diary);
-        this.id++;
+        var pledge = this.pledge.get(index);
+        if (pledge){
+            throw new Error("index has been occupied");
+        }
+
+        pledge = new Pledge();
+        pledge.man_name = man_name;
+        pledge.man_content = man_content;
+        pledge.woman_name = woman_name;
+        pledge.woman_content = woman_content;
+        pledge.date = new Date();
+        this.pledge.put(index, pledge);
     },
 
-    getByTitle: function (title) {
-        title = title.trim();
-        if ( title === "" ) {
-            throw new Error("empty title")
-        }
-        return this.diary.get(title);
+    get: function (index) {
+        return this.pledge.get(index);
     },
-
-    getById:function(id){
-        if(id >= this.id){
-            throw new Error("id is too larger")
-        }
-        var title = this.diary_id.get(id);
-        return this.diary.get(title);
-    }
-
-    getall: function(){
-        var result = [];
-        for(var i = 0;i < this.id; i++){
-            var title = this.users.get(i);
-            var temp = this.diary.get(title);
-            result.push(temp);
-        }
-        return JSON.stringify(result);
-    }
 };
-module.exports = NEBULASDiary;
+module.exports = Certificate;
